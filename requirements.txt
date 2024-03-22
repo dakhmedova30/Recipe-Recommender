@@ -11,4 +11,6 @@ pygame==2.5.2
 
 # Specific to Project 2
 customtkinter~=5.2.2
+kaleido~=0.2.1
 pillow~=10.2.0
+pandas~=2.2.1

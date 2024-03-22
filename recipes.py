@@ -24,6 +24,25 @@ class Recipe:
         self.calories = calories
         self.cal_range = cal_range  # (min, max) calories out of the 5 recommended
 
+    def __str__(self) -> str:
+        """Returns a string representation of the recipe.
+        """
+        ingredients = ''
+        for i in range(len(self.ingredients)):
+            if i == 0:
+                ingredients += self.ingredients[i]
+            else:
+                ingredients += ", " + self.ingredients[i]
+
+        steps = ''
+        step_n = 1
+        for step in self.steps:
+            steps += f"{step_n}. {step}\n"
+            step_n += 1
+
+        return (f"{self.name}\nCooking Time: {self.cooking_time}\nRating: {self.rating}\nIngredients: {ingredients}"
+                f"\nCalories: {self.calories}\nSteps: {steps}")
+
     def scale(self, category: str) -> int:
         """
         Assigns a value of 1-5 according to the value of the characteristics (for radar chart).
@@ -81,7 +100,7 @@ class Recipe:
                     if self.calories < r[index]:
                         return index + 1
 
-    def create_radar_chart(self):
+    def create_radar_chart(self, image_name: str):
         """
         Generates an image of a radar chart for the recipe
         """
@@ -99,7 +118,8 @@ class Recipe:
             theta=['Rating', 'Cooking Time', 'Complexity', 'No. of Ingredients', 'Calories']))
         fig = px.line_polar(df, r='r', theta='theta', line_close=True)
         fig.update_traces(fill='toself')
-        fig.show()
+        # fig.show()
+        fig.write_image(f"{image_name}.png")
 
 
 s = ['heat oven to 250', 'toss lamb with salt and pepper', 'heat 2 tbls oil in dutch oven over medium high heat', \
@@ -116,4 +136,4 @@ i = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 
                'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', 'ground cumin',
                'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
 r1 = Recipe("lamb stew", 150, 4, i, s, 605.5, (490, 730))  # steps 14, ingredients 16
-r1.create_radar_chart()
+r1.create_radar_chart("fig1")

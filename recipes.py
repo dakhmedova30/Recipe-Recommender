@@ -1,5 +1,17 @@
+"""CSC111 Winter 2024 Project 2
+
+Module Description
+==================
+This module contains the Recipe class to represent a recipe from the dataset.
+
+Copyright and Usage Information
+===============================
+This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
+"""
+
 import plotly.express as px
 import pandas as pd
+from typing import Optional
 
 
 class Recipe:
@@ -15,7 +27,7 @@ class Recipe:
     cal_range: tuple[int, int]
 
     def __init__(self, name: str, cooking_time: int, rating: int, ingredients: list[str], steps: list[str],
-                 calories: float, cal_range: tuple[int, int]):
+                 calories: float, cal_range: Optional[tuple[int, int]] = (0, 0)):
         self.name = name
         self.cooking_time = cooking_time
         self.rating = rating

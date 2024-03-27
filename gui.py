@@ -1,11 +1,19 @@
 """CSC111 Winter 2024 Project 2
-TODO: add description and copyright
+
+Module Description
+==================
+This module contains the App, TabWindow, and TabView classes to display the GUI for the
+recipe recommender.
+
+Copyright and Usage Information
+===============================
+This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
 """
 import customtkinter as ctk
 from PIL import Image
 import recipes
 
-ctk.set_appearance_mode("dark")
+ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("dark-blue")
 
 
@@ -34,7 +42,7 @@ class App(ctk.CTk):
             self.tab_window = TabWindow(self)  # create window if its None or destroyed
             # TODO: pass in recipe data
             tab_view = TabView(master=self.tab_window, recipes=placeholder_data)
-            tab_view.pack(side="top", padx=20, pady=20)
+            tab_view.grid(row=1, column=0)
         else:
             self.tab_window.focus()  # if window exists focus it
 
@@ -49,21 +57,21 @@ class TabWindow(ctk.CTkToplevel):
         super().__init__(*args, **kwargs)
 
         self.label = ctk.CTkLabel(self, text="Recipe Recommendations", font=("TkDefaultFont", 30))
-        self.label.pack(padx=20, pady=20)
+        self.label.grid(row=0, column=0)
 
 
 class TabView(ctk.CTkTabview):
     """A tabview with 5 tabs, one for each recipe.
 
     Instance Attributes:
-        - label: The label containing the data of the recipe
+        - textbox: The textbox containing the data of the recipe
         - label_img: The label containing the image of the spider chart for the recipe
     """
-    def __init__(self, master, recipes: list[tuple[str, str]], **kwargs) -> None:
+    def __init__(self, master, recipes: list[recipes.Recipe], **kwargs) -> None:
         """Initialize a tabview with 5 tabs using the given recipe data.
 
         Preconditions:
-            - len(recipes) == 5
+            - len(recipes) <= 5
             - all(len(recipe) == 2 for recipe in recipes)
             - For each tuple in recipes, the first element contains the data of the recipe and the second element
             contains the path to an image
@@ -74,37 +82,36 @@ class TabView(ctk.CTkTabview):
         for i in range(1, 6):
             self.add(f"Recipe {i}")
 
-        # load images
-        images = []
-        for recipe in recipes:
-            images.append(ctk.CTkImage(Image.open(recipe[1]), size=(640, 480)))
-        # TODO: change image size depending on size of radar chart from plotly
+        num_recipes = len(recipes)
 
         # add widgets on tabs
-        for i in range(1, 6):
-            self.label = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), text=recipes[i - 1][0], justify='left')
-            self.label.grid(row=0, column=0, padx=20, pady=10)
-            self.label_img = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), image=images[i - 1], text='')
+        for i in range(1, num_recipes + 1):
+            # load the string representation of the recipe
+            txt = str(recipes[i - 1])
+
+            # load the radar chart
+            recipes[i - 1].create_radar_chart("fig")
+            img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
+
+            # self.label = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), text=recipes[i - 1][0], justify='left')
+            # self.label.grid(row=0, column=0, padx=20, pady=10)
+            self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
+                                          fg_color="transparent")
+            self.textbox.grid(row=0, column=0, sticky="nsew")
+            self.textbox.insert("0.0", txt)
+            self.label_img = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), image=img, text="")
             self.label_img.grid(row=1, column=0, padx=20, pady=10)
+
+        for i in range(num_recipes + 1, 6):
+            self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
+                                          fg_color="transparent")
+            self.textbox.grid(row=0, column=0, sticky="nsew")
+            self.textbox.insert("0.0", "Not enough recipes fit the criteria.")
 
 
 if __name__ == "__main__":
     # TODO: use actual recipe data
-    # placeholder recipe
-    recipe_list = ['combine beans , onion , chilies , 1 / 2 teaspoon cumin , garlic powder and broth in crock pot',
-                   'cook on low 8 hours or on high 4 hours',
-                   'stir in cilantro , olive oil and remaining 1 / 2 teaspoon cumin',
-                   'garnish with sour cream , if desired']
-    steps = ''
-    step_n = 1
-    for step in recipe_list:
-        steps += f"{step_n}. {step}\n"
-        step_n += 1
-
-    placeholder_recipe = (f"arriba baked winter squash mexican style\n {steps}", "test_image.jpeg")
-    placeholder_data = [placeholder_recipe for _ in range(5)]
-    # For each tuple in placeholder_data, the first element contains the data of the recipe and the second element
-    #         contains the path to an image
+    placeholder_data = [recipes.r1 for _ in range(3)]  # example where there are only three recipes
 
     app = App()
     app.mainloop()

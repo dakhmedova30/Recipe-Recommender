@@ -335,10 +335,10 @@ class Tree:
 
 @check_contracts
 def build_decision_tree(file: str) -> Tree:
-    """Build a decision tree storing the animal data from the given file.
+    """Build a decision tree storing the recipe data from the given file.
 
     Preconditions:
-        - file is the path to a csv file in the format of the provided animals.csv
+        - file is the path to a csv file in the format of the filtered_merged.csv
     """
     tree = Tree('', [])  # The start of a decision tree
 
@@ -394,11 +394,44 @@ def build_decision_tree(file: str) -> Tree:
                 new_branch.append('240+')
 
             # calories
-            # TODO
+            if calories < 500:
+                new_branch.append('500')
+            elif calories < 1000:
+                new_branch.append('1000')
+            elif calories < 1500:
+                new_branch.append('1500')
+            elif calories < 2000:
+                new_branch.append('2000')
+            else:
+                new_branch.append('2000+')
 
             new_branch.append(recipe)
             tree.insert_sequence(new_branch)
     return tree
+
+
+def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str], diet_preference: list[str]) -> list[Recipe]:
+    """Return a filtered list of recipes based on the provided allergy and diet preference data.
+    """
+    filtered_recipes = []
+    for recipe in recipes:
+        if all(allergen not in recipe.ingredients for allergen in allergic_ingredients):  # TODO: filter diet preference
+            filtered_recipes.append(recipe)
+    return filtered_recipes
+
+
+@check_contracts
+def recommend_recipes(recipe_file: str) -> list[Recipe]:
+    """Run a recipe recommender program based on the given recipe data file and questionnaire answers.
+    """
+
+    decision_tree = build_decision_tree(recipe_file)
+    # TODO: read data from questionnaire
+    answers = get_user_input(ANIMAL_QUESTIONS)
+    allergens = []
+    diet = []
+    recipes = decision_tree.check_equality(answers)
+    return filter_recipes(recipes, allergens, diet)
 
 
 ANIMAL_QUESTIONS = [

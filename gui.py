@@ -1,5 +1,13 @@
 """CSC111 Winter 2024 Project 2
-TODO: add description and copyright
+
+Module Description
+==================
+This module contains the App, TabWindow, and TabView classes to display the GUI for the
+recipe recommender.
+
+Copyright and Usage Information
+===============================
+This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
 """
 import customtkinter as ctk
 from PIL import Image
@@ -60,48 +68,48 @@ class TabView(ctk.CTkTabview):
         - label_img: The label containing the image of the spider chart for the recipe
     """
     def __init__(self, master, recipes: list[recipes.Recipe], **kwargs) -> None:
-    """Initialize a tabview with 5 tabs using the given recipe data.
+        """Initialize a tabview with 5 tabs using the given recipe data.
 
-    Preconditions:
-        - len(recipes) <= 5
-        - all(len(recipe) == 2 for recipe in recipes)
-        - For each tuple in recipes, the first element contains the data of the recipe and the second element
-        contains the path to an image
-    """
-    super().__init__(master, **kwargs)
+        Preconditions:
+            - len(recipes) <= 5
+            - all(len(recipe) == 2 for recipe in recipes)
+            - For each tuple in recipes, the first element contains the data of the recipe and the second element
+            contains the path to an image
+        """
+        super().__init__(master, **kwargs)
 
-    # create tabs
-    for i in range(1, 6):
-        self.add(f"Recipe {i}")
+        # create tabs
+        for i in range(1, 6):
+            self.add(f"Recipe {i}")
 
-    num_recipes = len(recipes)
+        num_recipes = len(recipes)
 
-    # add widgets on tabs
-    for i in range(1, num_recipes + 1):
-        # load the string representation of the recipe
-        txt = str(recipes[i - 1])
+        # add widgets on tabs
+        for i in range(1, num_recipes + 1):
+            # load the string representation of the recipe
+            txt = str(recipes[i - 1])
 
-        # load the radar chart
-        recipes[i - 1].create_radar_chart("fig")
-        img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
+            # load the radar chart
+            recipes[i - 1].create_radar_chart("fig")
+            img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
 
-        self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
-                                      fg_color="transparent")
-        self.textbox.grid(row=0, column=0, sticky="nsew")
-        self.textbox.insert("0.0", txt)
-        self.label_img = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), image=img, text="")
-        self.label_img.grid(row=1, column=0, padx=20, pady=10)
+            self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
+                                          fg_color="transparent")
+            self.textbox.grid(row=0, column=0, sticky="nsew")
+            self.textbox.insert("0.0", txt)
+            self.label_img = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), image=img, text="")
+            self.label_img.grid(row=1, column=0, padx=20, pady=10)
 
-    for i in range(num_recipes + 1, 6):
-        self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
-                                      fg_color="transparent")
-        self.textbox.grid(row=0, column=0, sticky="nsew")
-        self.textbox.insert("0.0", "Not enough recipes fit the criteria.")
+        for i in range(num_recipes + 1, 6):
+            self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
+                                          fg_color="transparent")
+            self.textbox.grid(row=0, column=0, sticky="nsew")
+            self.textbox.insert("0.0", "Not enough recipes fit the criteria.")
+
 
 if __name__ == "__main__":
     # TODO: remove placeholder data
     placeholder_data = [recipes.r1 for _ in range(3)]  # example where there are only three recipes
-
 
     app = App()
     app.mainloop()

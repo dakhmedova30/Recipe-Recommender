@@ -93,8 +93,6 @@ class TabView(ctk.CTkTabview):
             recipes[i - 1].create_radar_chart("fig")
             img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
 
-            # self.label = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), text=recipes[i - 1][0], justify='left')
-            # self.label.grid(row=0, column=0, padx=20, pady=10)
             self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
                                           fg_color="transparent")
             self.textbox.grid(row=0, column=0, sticky="nsew")
@@ -110,7 +108,7 @@ class TabView(ctk.CTkTabview):
 
 
 if __name__ == "__main__":
-    # TODO: use actual recipe data
+    # TODO: remove placeholder data
     placeholder_data = [recipes.r1 for _ in range(3)]  # example where there are only three recipes
 
     app = App()

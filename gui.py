@@ -23,28 +23,17 @@ class App(ctk.CTk):
     Instance Attributes:
         - self.generate_button: a button that displays the recipes in a new window when clicked
         - self.tab_window: an additional window to display the recipes
-        - TODO
     """
-    def __init__(self) -> None:
+    def __init__(self, recipe_data: list[recipes.Recipe]) -> None:
         super().__init__()
 
-        # TODO: add questionnaire GUI
+        self.title("Recipe Recommendations")
 
-        self.generate_button = ctk.CTkButton(self, text="Generate Recipes", command=self.open_tab_window)
-        self.generate_button.pack(side="top", padx=20, pady=20)
+        self.label = ctk.CTkLabel(self, text="Recipe Recommendations", font=("TkDefaultFont", 30))
+        self.label.pack(padx=20, pady=20)
 
-        self.tab_window = None
-
-    def open_tab_window(self):
-        """Opens a new tab window with a tabview.
-        """
-        if self.tab_window is None or not self.tab_window.winfo_exists():
-            self.tab_window = TabWindow(self)  # create window if its None or destroyed
-            # TODO: pass in recipe data
-            tab_view = TabView(master=self.tab_window, recipes=placeholder_data)
-            tab_view.pack(side="top", padx=20, pady=20)
-        else:
-            self.tab_window.focus()  # if window exists focus it
+        tab_view = TabView(master=self, recipes=recipe_data)
+        tab_view.pack(side="top", padx=20, pady=20)
 
 
 class TabWindow(ctk.CTkToplevel):
@@ -53,11 +42,14 @@ class TabWindow(ctk.CTkToplevel):
     Instance Attributes:
         - label: The label containing the text in the window
     """
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, recipe_data: list[recipes.Recipe], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.label = ctk.CTkLabel(self, text="Recipe Recommendations", font=("TkDefaultFont", 30))
         self.label.pack(padx=20, pady=20)
+
+        tab_view = TabView(master=self, recipes=recipe_data)
+        tab_view.pack(side="top", padx=20, pady=20)
 
 
 class TabView(ctk.CTkTabview):
@@ -94,7 +86,7 @@ class TabView(ctk.CTkTabview):
             img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
 
             self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
-                                          fg_color="transparent")
+                                          fg_color="transparent", wrap="word")
             self.textbox.grid(row=0, column=0, sticky="nsew")
             self.textbox.insert("0.0", txt)
             self.label_img = ctk.CTkLabel(master=self.tab(f"Recipe {i}"), image=img, text="")
@@ -105,11 +97,3 @@ class TabView(ctk.CTkTabview):
                                           fg_color="transparent")
             self.textbox.grid(row=0, column=0, sticky="nsew")
             self.textbox.insert("0.0", "Not enough recipes fit the criteria.")
-
-
-if __name__ == "__main__":
-    # TODO: remove placeholder data
-    placeholder_data = [recipes.r1 for _ in range(3)]  # example where there are only three recipes
-
-    app = App()
-    app.mainloop()

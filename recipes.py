@@ -52,7 +52,7 @@ class Recipe:
             steps += f"{step_n}. {step.capitalize()}\n"
             step_n += 1
 
-        return (f"{self.name.title()}\nCooking Time: {self.cooking_time}\nRating: {self.rating}\n"
+        return (f"{self.name.title()}\nCooking Time: {self.cooking_time} minutes\nRating: {self.rating}\n"
                 f"Ingredients: {ingredients}\nCalories: {self.calories}\nSteps:\n{steps}")
 
     def scale(self, category: str) -> int:

@@ -360,50 +360,50 @@ def build_decision_tree(file: str) -> Tree:
             # food preference
             tags = ast.literal_eval(row[9])
             if 'main-dish' in tags:
-                new_branch.append('main dish')
+                new_branch.append('Main dish')
             elif 'side-dishes' in tags:
-                new_branch.append('side dish')
+                new_branch.append('Side dish')
             elif 'desserts' in tags:
-                new_branch.append('dessert')
+                new_branch.append('Dessert')
             else:
-                new_branch.append('other')
+                new_branch.append('Other')
 
             # difficulty
             n_steps = int(row[11])
             if n_steps < 5:
-                new_branch.append('5')
+                new_branch.append('Beginner')
             elif n_steps < 10:
-                new_branch.append('10')
+                new_branch.append('Novice')
             elif n_steps < 20:
-                new_branch.append('20')
+                new_branch.append('Intermediate')
             elif n_steps < 30:
-                new_branch.append('30')
+                new_branch.append('Advanced')
             else:
-                new_branch.append('30+')
+                new_branch.append('Expert')
 
             # amount of time
             if cooking_time < 30:
-                new_branch.append('30')
+                new_branch.append('0-29 Minutes')
             elif cooking_time < 80:
-                new_branch.append('80')
+                new_branch.append('30-79 Minutes')
             elif cooking_time < 160:
-                new_branch.append('160')
+                new_branch.append('80-159 Minutes')
             elif cooking_time < 160:
-                new_branch.append('240')
+                new_branch.append('160-239 Minutes')
             else:
-                new_branch.append('240+')
+                new_branch.append('240+ Minutes')
 
             # calories
             if calories < 500:
-                new_branch.append('500')
+                new_branch.append('Less than 500 calories')
             elif calories < 1000:
-                new_branch.append('1000')
+                new_branch.append('500-999 calories')
             elif calories < 1500:
-                new_branch.append('1500')
+                new_branch.append('1000-1499 calories')
             elif calories < 2000:
-                new_branch.append('2000')
+                new_branch.append('1500-1999 calories')
             else:
-                new_branch.append('2000+')
+                new_branch.append('2000 or more calories')
 
             new_branch.append(recipe)
             tree.insert_sequence(new_branch)
@@ -418,20 +418,6 @@ def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str], diet_
         if all(allergen not in recipe.ingredients for allergen in allergic_ingredients):  # TODO: filter diet preference
             filtered_recipes.append(recipe)
     return filtered_recipes
-
-
-@check_contracts
-def recommend_recipes(recipe_file: str) -> list[Recipe]:
-    """Run a recipe recommender program based on the given recipe data file and questionnaire answers.
-    """
-
-    decision_tree = build_decision_tree(recipe_file)
-    # TODO: read data from questionnaire
-    answers = get_user_input(ANIMAL_QUESTIONS)
-    allergens = []
-    diet = []
-    recipes = decision_tree.check_equality(answers)
-    return filter_recipes(recipes, allergens, diet)
 
 
 ANIMAL_QUESTIONS = [

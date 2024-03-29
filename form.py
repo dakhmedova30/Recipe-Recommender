@@ -48,10 +48,11 @@ def enter_data():
     recipes = recipes[:5]  # take the first five recipes
 
     # calculate cal_range
-    max_calories = max([recipe.calories for recipe in recipes])
-    min_calories = min([recipe.calories for recipe in recipes])
-    for recipe in recipes:
-        recipe.cal_range = (min_calories, max_calories)
+    if len(recipes) > 0:
+        max_calories = max([recipe.calories for recipe in recipes])
+        min_calories = min([recipe.calories for recipe in recipes])
+        for recipe in recipes:
+            recipe.cal_range = (min_calories, max_calories)
 
     # open the tabview
     gui.TabWindow(recipes)

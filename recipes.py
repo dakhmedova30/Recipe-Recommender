@@ -49,11 +49,11 @@ class Recipe:
         steps = ''
         step_n = 1
         for step in self.steps:
-            steps += f"{step_n}. {step}\n"
+            steps += f"{step_n}. {step.capitalize()}\n"
             step_n += 1
 
-        return (f"{self.name}\nCooking Time: {self.cooking_time}\nRating: {self.rating}\nIngredients: {ingredients}"
-                f"\nCalories: {self.calories}\nSteps: {steps}")
+        return (f"{self.name.title()}\nCooking Time: {self.cooking_time}\nRating: {self.rating}\n"
+                f"Ingredients: {ingredients}\nCalories: {self.calories}\nSteps:\n{steps}")
 
     def scale(self, category: str) -> int:
         """
@@ -148,4 +148,4 @@ i = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 
                'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', 'ground cumin',
                'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
 r1 = Recipe("lamb stew", 150, 4, i, s, 605.5, (490, 730))  # steps 14, ingredients 16
-r1.create_radar_chart("fig1")
+# r1.create_radar_chart("fig1")

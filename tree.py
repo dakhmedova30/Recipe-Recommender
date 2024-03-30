@@ -15,7 +15,6 @@ import csv
 import ast
 from typing import Any, Optional
 from recipes import Recipe
-import form
 
 from python_ta.contracts import check_contracts
 
@@ -438,13 +437,13 @@ def recommend_recipes(recipe_file: str) -> list[Recipe]:
     # main/side/dessert -> difficulty (5 10 20 30) -> time (30 80 160 240 240+) -> cal (500-2000)
 
     decision_tree = build_decision_tree(recipe_file)
-    answers = form.form_answers
-    portion = 'main'  # placeholder
-    allergens = answers['Allergies']
-    diet = answers['Diet']
-    recipes = decision_tree.check_equality(
-        [portion, answers['Difficulty'], answers['Time'], answers['Calories']])
-    return filter_recipes(recipes, allergens, diet)
+    # answers = form.form_answers
+    # portion = 'main'  # placeholder
+    # allergens = answers['Allergies']
+    # diet = answers['Diet']
+    # recipes = decision_tree.check_equality(
+    #     [portion, answers['Difficulty'], answers['Time'], answers['Calories']])
+    # return filter_recipes(recipes, allergens, diet)
 
 
 if __name__ == '__main__':

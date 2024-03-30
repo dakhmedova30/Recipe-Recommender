@@ -1,6 +1,8 @@
 import tkinter
 from tkinter import ttk
 from tkinter import *
+import tree
+import gui
 
 form_answers = {
     "Difficulty": '',
@@ -47,15 +49,24 @@ def enter_data():
     print("Food:", food)
     print("Other:", other)
     print("---------------------------------")
-    form_answers['Difficulty'] = difficulty
-    form_answers['Time'] = time
-    form_answers['Calories'] = calories
-    form_answers['Allergy'] = allergy
-    form_answers['List Allergies'] = list_allergies
-    form_answers['Diet'] = diet_selection
-    form_answers['Cuisine'] = cuisine_selection
-    form_answers['Food'] = food
-    form_answers['Other'] = other
+    # form_answers['Difficulty'] = difficulty
+    # form_answers['Time'] = time
+    # form_answers['Calories'] = calories
+    # form_answers['Allergy'] = allergy
+    # form_answers['List Allergies'] = list_allergies
+    # form_answers['Diet'] = diet_selection
+    # form_answers['Cuisine'] = cuisine_selection
+    # form_answers['Food'] = food
+    # form_answers['Other'] = other
+
+    decision_tree = tree.build_decision_tree("filtered_merged.csv")
+    portion = 'main'  # placeholder
+    allergens = list_allergies
+    diet = diet_selection
+    recipes = decision_tree.check_equality(
+        [portion, difficulty, time, calories])
+    # recipes = tree.filter_recipes(recipes, allergens, diet)
+    gui.TabWindow(recipes)
 
     clear_form()
 

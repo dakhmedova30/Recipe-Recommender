@@ -4,17 +4,17 @@ from tkinter import *
 import tree
 import gui
 
-form_answers = {
-    "Difficulty": '',
-    "Time": '',
-    "Calories": '',
-    "Allergy": '',
-    "List Allergies": '',
-    "Diet": '',
-    "Cuisine": '',
-    "Food": '',
-    'Other': ''
-}
+# form_answers = {
+#     "Difficulty": '',
+#     "Time": '',
+#     "Calories": '',
+#     "Allergy": '',
+#     "List Allergies": '',
+#     "Diet": '',
+#     "Cuisine": '',
+#     "Food": '',
+#     'Other': ''
+# }
 
 def clear_form():
     difficulty_combo_box.set('')
@@ -30,7 +30,7 @@ def clear_form():
 def enter_data():
     difficulty = difficulty_combo_box.get()
     time = time_combo_box.get()
-    calories = calories_spinbox.get()
+    calories = int(calories_spinbox.get())
     allergy = allergy_status_var.get()
     list_allergies = allergies_text.get("1.0", tkinter.END).strip()
 
@@ -59,14 +59,59 @@ def enter_data():
     # form_answers['Food'] = food
     # form_answers['Other'] = other
 
+    match difficulty:
+        case "Beginner":
+            n_steps = '5'
+        case "Novice":
+            n_steps = '10'
+        case "Intermediate":
+            n_steps = '20'
+        case "Advanced":
+            n_steps = '30'
+        case _:
+            n_steps = '30+'
+
+    match time:
+        case "0-29 Minutes":
+            time_threshold = '30'
+        case "30-79 Minutes":
+            time_threshold = '80'
+        case "80-159 Minutes":
+            time_threshold = '160'
+        case "160-239 Minutes":
+            time_threshold = '240'
+        case _:
+            time_threshold = '240+'
+
+    if calories < 500:
+        calorie_level = '500'
+    elif calories < 1000:
+        calorie_level = '1000'
+    elif calories < 1500:
+        calorie_level = '1500'
+    elif calories < 2000:
+        calorie_level = '2000'
+    else:
+        calorie_level = '2000+'
+
     decision_tree = tree.build_decision_tree("filtered_merged.csv")
-    portion = 'main'  # placeholder
+    portion = 'main dish'  # TODO: placeholder
     allergens = list_allergies
     diet = diet_selection
     recipes = decision_tree.check_equality(
-        [portion, difficulty, time, calories])
-    # recipes = tree.filter_recipes(recipes, allergens, diet)
+        [portion, n_steps, time_threshold, calorie_level])
+    # recipes = tree.filter_recipes(recipes, allergens, diet)  # TODO
+
+    recipes = recipes[:5]  # take the first five recipes
+    # calculate cal_range
+    if len(recipes) > 0:
+        max_calories = max([recipe.calories for recipe in recipes])
+        min_calories = min([recipe.calories for recipe in recipes])
+        for recipe in recipes:
+            recipe.cal_range = (min_calories, max_calories)
+
     gui.TabWindow(recipes)
+    print([portion, n_steps, time_threshold, calorie_level])
 
     clear_form()
 
@@ -93,7 +138,7 @@ time_label.grid(row=0, column=1)
 time_combo_box.grid(row=1, column=1)
 
 # Calories
-calories_label = tkinter.Label(basic_info_frame, text="Max Calories")
+calories_label = tkinter.Label(basic_info_frame, text="Calories")
 calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000) # TODO: Whats the max?
 calories_label.grid(row=0, column=2)
 calories_spinbox.grid(row=1, column=2)
@@ -179,4 +224,5 @@ button.grid(row=2, column=0, sticky="news", padx=20, pady=10)
 clear_button = tkinter.Button(frame, text="Clear", command=clear_form)
 clear_button.grid(row=3, column=0, sticky="news", padx=20, pady=10)
 
-window.mainloop()
+if __name__ == '__main__':
+    window.mainloop()

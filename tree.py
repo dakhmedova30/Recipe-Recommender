@@ -15,6 +15,7 @@ import csv
 import ast
 from typing import Any, Optional
 from recipes import Recipe
+import form
 
 from python_ta.contracts import check_contracts
 
@@ -190,7 +191,7 @@ class Tree:
 
         if self.is_empty():  # tree is empty
             return 'Tree(None, [])'
-        elif self._subtrees == []:  # tree is a single value
+        elif not self._subtrees:  # tree is a single value
             return f'Tree({self._root}, [])'
         else:  # tree has at least one subtree
             subtree_list = []
@@ -287,7 +288,7 @@ class Tree:
 
         return None
 
-    def check_equality(self, items: list) -> list:
+    def check_equality(self, features: list) -> list:
         """Returns a list of the values of the leaves of the tree with the same ancestors as the given list of items,
         excluding the root of the tree. If the tree is empty or the ancestors are not the same, return an empty list.
 
@@ -298,31 +299,41 @@ class Tree:
             - height of the tree > 2
             - all children of the root have the same length
 
-        >>> t = Tree('', [])
-        >>> t.insert_sequence([1, 0, 1, 'a'])
-        >>> t.insert_sequence([1, 0, 1, 'b'])
-        >>> t.insert_sequence([0, 0, 1, 'c'])
-        >>> t.check_equality([1, 0, 1])
-        ['a', 'b']
-        >>> t.check_equality([0, 0, 1])
-        ['c']
-        >>> t.check_equality([0, 1, 1])
-        []
+        >>> tree = build_decision_tree('filtered_merged_small.csv')  # check in console
+        >>> tree.check_equality(['other','5','250','500'])  # returns recipe object
+        ['white bean   green chile pepper soup']
+        >>> tree.check_equality(['dessert','10','30','500'])
+        ['devilicious cookie cake delights', 'sugared raspberries']
         """
-        if self.is_empty() or items == [] or items[0] not in [sub._root for sub in self._subtrees]:
+        # main/side/dessert -> difficulty (5 10 20 30+) -> time (30 80 160 240 240+) -> cal (500-2000+)
+        if self.is_empty() or features == []:
             return []
         else:
             leaves = []
             for subtree in self._subtrees:
-                if items[0] == subtree._root and not subtree._subtrees[0]._subtrees:
+                item = features[0]
+                is_int = item.isdigit()
+                has_plus = '+' in subtree._root
+
+                if item == subtree._root and not subtree._subtrees[0]._subtrees:
                     subtree.append_leaves(leaves)
-                elif items[0] == subtree._root:
-                    leaves.extend(subtree.check_equality(items[1:]))
+                elif item == subtree._root:
+                    leaves.extend(subtree.check_equality(features[1:]))
+
+                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root)-1]) and not subtree._subtrees[0]._subtrees:
+                    subtree.append_leaves(leaves)
+                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root)-1]):
+                    leaves.extend(subtree.check_equality(features[1:]))
+
+                elif not has_plus and is_int and int(item) <= int(subtree._root) and not subtree._subtrees[0]._subtrees:
+                    subtree.append_leaves(leaves)
+                elif not has_plus and is_int and int(item) <= int(subtree._root):
+                    leaves.extend(subtree.check_equality(features[1:]))
+
             return leaves
 
     def append_leaves(self, lst: list) -> None:
         """Append the roots of the subtrees of this tree to the given list. Helper method for check_equality.
-
         """
         for sub in self._subtrees:
             lst.append(sub._root)
@@ -360,50 +371,50 @@ def build_decision_tree(file: str) -> Tree:
             # food preference
             tags = ast.literal_eval(row[9])
             if 'main-dish' in tags:
-                new_branch.append('Main dish')
+                new_branch.append('main dish')
             elif 'side-dishes' in tags:
-                new_branch.append('Side dish')
+                new_branch.append('side dish')
             elif 'desserts' in tags:
-                new_branch.append('Dessert')
+                new_branch.append('dessert')
             else:
-                new_branch.append('Other')
+                new_branch.append('other')
 
             # difficulty
             n_steps = int(row[11])
             if n_steps < 5:
-                new_branch.append('Beginner')
+                new_branch.append('5')
             elif n_steps < 10:
-                new_branch.append('Novice')
+                new_branch.append('10')
             elif n_steps < 20:
-                new_branch.append('Intermediate')
+                new_branch.append('20')
             elif n_steps < 30:
-                new_branch.append('Advanced')
+                new_branch.append('30')
             else:
-                new_branch.append('Expert')
+                new_branch.append('30+')
 
             # amount of time
             if cooking_time < 30:
-                new_branch.append('0-29 Minutes')
+                new_branch.append('30')
             elif cooking_time < 80:
-                new_branch.append('30-79 Minutes')
+                new_branch.append('80')
             elif cooking_time < 160:
-                new_branch.append('80-159 Minutes')
+                new_branch.append('160')
             elif cooking_time < 160:
-                new_branch.append('160-239 Minutes')
+                new_branch.append('240')
             else:
-                new_branch.append('240+ Minutes')
+                new_branch.append('240+')
 
             # calories
             if calories < 500:
-                new_branch.append('Less than 500 calories')
+                new_branch.append('500')
             elif calories < 1000:
-                new_branch.append('500-999 calories')
+                new_branch.append('1000')
             elif calories < 1500:
-                new_branch.append('1000-1499 calories')
+                new_branch.append('1500')
             elif calories < 2000:
-                new_branch.append('1500-1999 calories')
+                new_branch.append('2000')
             else:
-                new_branch.append('2000 or more calories')
+                new_branch.append('2000+')
 
             new_branch.append(recipe)
             tree.insert_sequence(new_branch)
@@ -420,51 +431,20 @@ def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str], diet_
     return filtered_recipes
 
 
-ANIMAL_QUESTIONS = [
-    'Does this animal have hair?',
-    'Does this animal lay eggs?',
-    'Is this animal aquatic?',
-    'Is this animal a predator?',
-    'Does this animal have exactly 4 legs?',
-    'Does this animal have a tail?',
-    'Is this animal a mammal?'
-]
-
-
 @check_contracts
-def get_user_input(questions: list[str]) -> list[bool]:
-    """Return the user's answers to a list of Yes/No questions."""
-    answers_so_far = []
-
-    for question in questions:
-        print(question)
-        s = input('Y/N: ')
-        answers_so_far.append(s == 'Y')  # Any other input is interpreted as False
-
-    return answers_so_far
-
-
-@check_contracts
-def run_animal_guesser(animal_file: str) -> None:
-    """Run an animal guessing program based on the given animal data file.
-
-    This function should:
-        1. Create a decision tree based on the given animal file.
-        2. Prompt the user for their desired animal characteristics (use `get_user_input(ANIMAL_QUESTIONS)`)
-        3. Traverse the decision tree to determine the possible animals(s) that match
-           the user's inputs. You will likely need to implement a new Tree method to
-           accomplish this part.
-        4. Print the results back to the user. This might be "no animals", an exact match
-           (one animal), or multiple animals. You can choose the exact messages you print.
+def recommend_recipes(recipe_file: str) -> list[Recipe]:
+    """Run a recipe recommender program based on the given recipe data file and questionnaire answers.
     """
+    # main/side/dessert -> difficulty (5 10 20 30) -> time (30 80 160 240 240+) -> cal (500-2000)
 
-    decision_tree = build_decision_tree(animal_file)
-    answers = get_user_input(ANIMAL_QUESTIONS)
-    animals = decision_tree.check_equality(answers)
-    if len(animals) == 0:
-        print('no animals')
-    else:
-        print(', '.join(animals))
+    decision_tree = build_decision_tree(recipe_file)
+    answers = form.form_answers
+    portion = 'main'  # placeholder
+    allergens = answers['Allergies']
+    diet = answers['Diet']
+    recipes = decision_tree.check_equality(
+        [portion, answers['Difficulty'], answers['Time'], answers['Calories']])
+    return filter_recipes(recipes, allergens, diet)
 
 
 if __name__ == '__main__':

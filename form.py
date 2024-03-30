@@ -37,36 +37,19 @@ def enter_data():
     list_allergies = allergies_text.get("1.0", tkinter.END).strip()
     diet_selection = [diet_listbox.get(idx) for idx in diet_listbox.curselection()]
     cuisine_selection = [cuisine_listbox.get(idx) for idx in cuisine_listbox.curselection()]
-    # food = food_text.get("1.0", tkinter.END).strip()
-    food = food_combo_box.get()
+    food = food_text.get("1.0", tkinter.END).strip()
     other = other_text.get("1.0", tkinter.END).strip()
 
-    decision_tree = tree.build_decision_tree("filtered_merged.csv")
-    answers = [food, difficulty, time, calories]
-    recipes = decision_tree.check_equality(answers)
-    # TODO: filter data
-    recipes = recipes[:5]  # take the first five recipes
-
-    # calculate cal_range
-    if len(recipes) > 0:
-        max_calories = max([recipe.calories for recipe in recipes])
-        min_calories = min([recipe.calories for recipe in recipes])
-        for recipe in recipes:
-            recipe.cal_range = (min_calories, max_calories)
-
-    # open the tabview
-    gui.TabWindow(recipes)
-
-    # print("Difficulty:", difficulty)
-    # print("Time:", time)
-    # print("Calories:", calories)
-    # print("Allergy:", allergy)
-    # print("List Allergies:", list_allergies)
-    # print("Diet:", diet_selection)
-    # print("Cuisine:", cuisine_selection)
-    # print("Food:", food)
-    # print("Other:", other)
-    # print("---------------------------------")
+    print("Difficulty:", difficulty)
+    print("Time:", time)
+    print("Calories:", calories)
+    print("Allergy:", allergy)
+    print("List Allergies:", list_allergies)
+    print("Diet:", diet_selection)
+    print("Cuisine:", cuisine_selection)
+    print("Food:", food)
+    print("Other:", other)
+    print("---------------------------------")
 
     clear_form()
 
@@ -161,14 +144,10 @@ preferences_frame.columnconfigure(1, weight=1)
 preferences_frame.rowconfigure(1, weight=1)
 
 # Food
-# food_label = tkinter.Label(preferences_frame, text="Food (separate by commas)")
-# food_text = tkinter.Text(preferences_frame, width=5, height=10)
-# food_label.grid(row=0, column=2)
-# food_text.grid(row=1, column=2, sticky="ew", padx=5)
-food_label = tkinter.Label(preferences_frame, text="Food")
-food_combo_box = ttk.Combobox(preferences_frame, values=["Main dish", "Side dish", "Dessert", "Other"])
+food_label = tkinter.Label(preferences_frame, text="Food (separate by commas)")
+food_text = tkinter.Text(preferences_frame, width=5, height=10)
 food_label.grid(row=0, column=2)
-food_combo_box.grid(row=1, column=2, sticky="ew", padx=5)
+food_text.grid(row=1, column=2, sticky="ew", padx=5)
 
 # Other
 other_label = tkinter.Label(preferences_frame, text="Other (separate by commas)")

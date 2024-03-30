@@ -1,40 +1,37 @@
-"""CSC111 Winter 2024 Project 2
-
-Module Description
-==================
-This module contains the code to display the form for the recipe recommender.
-
-Copyright and Usage Information
-===============================
-This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
-"""
-
 import tkinter
-import tree
-import gui
 from tkinter import ttk
 from tkinter import *
+
+form_answers = {
+    "Difficulty": '',
+    "Time": '',
+    "Calories": '',
+    "Allergy": '',
+    "List Allergies": '',
+    "Diet": '',
+    "Cuisine": '',
+    "Food": '',
+    'Other': ''
+}
 
 def clear_form():
     difficulty_combo_box.set('')
     time_combo_box.set('')
-    # calories_spinbox.delete(0, tkinter.END)
-    calories_combo_box.set('')
+    calories_spinbox.delete(0, tkinter.END)
     allergy_status_var.set('No')
     allergies_text.delete("1.0", tkinter.END)
     diet_listbox.selection_clear(0, tkinter.END)
     cuisine_listbox.selection_clear(0, tkinter.END)
-    # food_text.delete("1.0", tkinter.END)
-    food_combo_box.set('')
+    food_text.delete("1.0", tkinter.END)
     other_text.delete("1.0", tkinter.END)
 
 def enter_data():
     difficulty = difficulty_combo_box.get()
     time = time_combo_box.get()
-    # calories = int(calories_spinbox.get())
-    calories = calories_combo_box.get()
+    calories = calories_spinbox.get()
     allergy = allergy_status_var.get()
     list_allergies = allergies_text.get("1.0", tkinter.END).strip()
+
     diet_selection = [diet_listbox.get(idx) for idx in diet_listbox.curselection()]
     cuisine_selection = [cuisine_listbox.get(idx) for idx in cuisine_listbox.curselection()]
     food = food_text.get("1.0", tkinter.END).strip()
@@ -50,6 +47,15 @@ def enter_data():
     print("Food:", food)
     print("Other:", other)
     print("---------------------------------")
+    form_answers['Difficulty'] = difficulty
+    form_answers['Time'] = time
+    form_answers['Calories'] = calories
+    form_answers['Allergy'] = allergy
+    form_answers['List Allergies'] = list_allergies
+    form_answers['Diet'] = diet_selection
+    form_answers['Cuisine'] = cuisine_selection
+    form_answers['Food'] = food
+    form_answers['Other'] = other
 
     clear_form()
 
@@ -76,14 +82,10 @@ time_label.grid(row=0, column=1)
 time_combo_box.grid(row=1, column=1)
 
 # Calories
-# calories_label = tkinter.Label(basic_info_frame, text="Max Calories")
-# calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000) # TODO: Whats the max?
-# calories_label.grid(row=0, column=2)
-# calories_spinbox.grid(row=1, column=2)
-calories_label = tkinter.Label(basic_info_frame, text="Calories")
-calories_combo_box = ttk.Combobox(basic_info_frame, values=['Less than 500 calories', '500-999 calories', '1000-1499 calories', '1500-1999 calories', '2000 or more calories'])
+calories_label = tkinter.Label(basic_info_frame, text="Max Calories")
+calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000) # TODO: Whats the max?
 calories_label.grid(row=0, column=2)
-calories_combo_box.grid(row=1, column=2)
+calories_spinbox.grid(row=1, column=2)
 
 # Allergy
 allergy_label = tkinter.Label(basic_info_frame, text="Have Allergies?")

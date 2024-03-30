@@ -207,9 +207,28 @@ food_text = tkinter.Text(preferences_frame, width=5, height=10)
 food_label.grid(row=0, column=2)
 food_text.grid(row=1, column=2, sticky="ew", padx=5)
 
+# Type of Dish
+dish_label = tkinter.Label(preferences_frame, text="Type of Dish")
+dish_label.grid(row=2, column=0)
+dish_frame = tkinter.Frame(preferences_frame)
+dish_frame.grid(row=3, column=0)
+
+# dish_scrollbar = tkinter.Scrollbar(dish_frame, orient=tkinter.VERTICAL)
+dish_listbox = tkinter.Listbox(dish_frame, selectmode="multiple", exportselection=0, width=23, height=3)
+dish_list = ["Appetizer", "Entrée", "Dessert"]
+for dish_item in dish_list:
+    dish_listbox.insert(tkinter.END, dish_item)
+
+dish_listbox.grid(row=0, column=0, sticky="nsew")
+# dish_scrollbar.config(command=dish_listbox.yview)
+# dish_scrollbar.grid(row=0, column=1, sticky="ns")
+
+# preferences_frame.columnconfigure(2, weight=1)
+# preferences_frame.rowconfigure(3, weight=1)
+
 # Other
 other_label = tkinter.Label(preferences_frame, text="Other (separate by commas)")
-other_text = tkinter.Text(preferences_frame, width=5, height=2)
+other_text = tkinter.Text(preferences_frame, width=5, height=3)
 other_label.grid(row=2, column=1)
 other_text.grid(row=3, column=1, sticky="ew", padx=5)
 

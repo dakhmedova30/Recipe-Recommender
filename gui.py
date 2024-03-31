@@ -69,7 +69,7 @@ class TabView(ctk.CTkTabview):
 
             # load the radar chart
             recipes_list[i - 1].create_radar_chart("fig")
-            img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
+            img = ctk.CTkImage(Image.open("fig.png"), size=(590, 370))
 
             self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
                                           fg_color="transparent", wrap="word")

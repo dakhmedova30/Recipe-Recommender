@@ -131,14 +131,14 @@ basic_info_frame = tkinter.LabelFrame(frame, text="Basic Information")
 basic_info_frame.grid(row=0, column=0, sticky="news", padx=20, pady=10)
 
 # Difficulty
-difficulty_label = tkinter.Label(basic_info_frame, text="Difficulty")
+difficulty_label = tkinter.Label(basic_info_frame, text="*Difficulty")
 difficulty_combo_box = ttk.Combobox(basic_info_frame,
                                     values=["Beginner", "Novice", "Intermediate", "Advanced", "Expert"])
 difficulty_label.grid(row=0, column=0)
 difficulty_combo_box.grid(row=1, column=0)
 
 # Time Taken
-time_label = tkinter.Label(basic_info_frame, text="Max Time Taken")
+time_label = tkinter.Label(basic_info_frame, text="*Max Time Taken")
 time_combo_box = ttk.Combobox(basic_info_frame,
                               values=["0-29 Minutes", "30-79 Minutes", "80-159 Minutes", "160-239 Minutes",
                                       "240+ Minutes"])
@@ -146,7 +146,7 @@ time_label.grid(row=0, column=1)
 time_combo_box.grid(row=1, column=1)
 
 # Calories
-calories_label = tkinter.Label(basic_info_frame, text="Calories")
+calories_label = tkinter.Label(basic_info_frame, text="*Calories")
 calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000)  # TODO: Whats the max?
 calories_label.grid(row=0, column=2)
 calories_spinbox.grid(row=1, column=2)
@@ -220,7 +220,7 @@ food_label.grid(row=0, column=2)
 food_text.grid(row=1, column=2, sticky="ew", padx=5)
 
 # Type of Dish
-dish_label = tkinter.Label(preferences_frame, text="Type of Dish")
+dish_label = tkinter.Label(preferences_frame, text="*Type of Dish")
 dish_label.grid(row=2, column=0)
 dish_frame = tkinter.Frame(preferences_frame)
 dish_frame.grid(row=3, column=0)

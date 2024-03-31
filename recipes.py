@@ -134,18 +134,28 @@ class Recipe:
         fig.write_image(f"{image_name}.png")
 
 
-s = ['heat oven to 250', 'toss lamb with salt and pepper', 'heat 2 tbls oil in dutch oven over medium high heat', \
-         'brown lamb on all sides in two batches', 'set aside on plate',
-         'add onions to dutch oven and saute until softened', 'add garlic and cook an additional 30s',
-         'stir in flour and cook until lightly colored', 'add stock and deglaze pan',
-         'add tomatoes and spices and bring to simmer before adding lamb and returing to simmer',
-         'cover and place in oven until meat is almost tender',
-         'add chickpeas and return to oven until meat is tender and chicpeas are heated through',
-         'can be cooled , covered and refrigerated up tp 3 days before reheating on stovetop',
-         'stir in parsley , discard bay leaves and adjust seasoning just before serving']
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(verbose=True)
 
-i = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 'garlic cloves', 'flour',
-               'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', 'ground cumin',
-               'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
-r1 = Recipe("lamb stew", 150, 4, i, s, 605.5, (490, 730))  # steps 14, ingredients 16
-# r1.create_radar_chart("fig1")
+    import python_ta
+    python_ta.check_all('recipes.py', config={
+        'max-line-length': 120,
+        'extra-imports': ['plotly.express', 'pandas'],
+        'allowed-io': []
+    })
+
+    s = ['heat oven to 250', 'toss lamb with salt and pepper', 'heat 2 tbls oil in dutch oven over medium high heat',
+             'brown lamb on all sides in two batches', 'set aside on plate',
+             'add onions to dutch oven and saute until softened', 'add garlic and cook an additional 30s',
+             'stir in flour and cook until lightly colored', 'add stock and deglaze pan',
+             'add tomatoes and spices and bring to simmer before adding lamb and returing to simmer',
+             'cover and place in oven until meat is almost tender',
+             'add chickpeas and return to oven until meat is tender and chicpeas are heated through',
+             'can be cooled , covered and refrigerated up tp 3 days before reheating on stovetop',
+             'stir in parsley , discard bay leaves and adjust seasoning just before serving']
+
+    i = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 'garlic cloves', 'flour',
+                   'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', 'ground cumin',
+                   'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
+    r1 = Recipe("lamb stew", 150, 4, i, s, 605.5, (490, 730))  # steps 14, ingredients 16

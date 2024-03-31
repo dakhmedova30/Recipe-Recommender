@@ -14,12 +14,11 @@ from __future__ import annotations
 import csv
 import ast
 from typing import Any, Optional
+from python_ta.contracts import check_contracts
 from recipes import Recipe
 
-from python_ta.contracts import check_contracts
 
-
-# @check_contracts - We are commenting this out, so it doesn't slow down the code for Part 2.2
+# @check_contracts
 class Tree:
     """A recursive tree data structure.
 
@@ -319,9 +318,10 @@ class Tree:
                 elif item == subtree._root:
                     leaves.extend(subtree.check_equality(features[1:]))
 
-                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root)-1]) and not subtree._subtrees[0]._subtrees:
+                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]) and not subtree._subtrees[
+                        0]._subtrees:
                     subtree.append_leaves(leaves)
-                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root)-1]):
+                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]):
                     leaves.extend(subtree.check_equality(features[1:]))
 
                 elif not has_plus and is_int and int(item) <= int(subtree._root) and not subtree._subtrees[0]._subtrees:
@@ -343,7 +343,7 @@ class Tree:
 ################################################################################
 
 
-@check_contracts
+# @check_contracts
 def build_decision_tree(file: str) -> Tree:
     """Build a decision tree storing the recipe data from the given file.
 
@@ -420,7 +420,7 @@ def build_decision_tree(file: str) -> Tree:
     return tree
 
 
-def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str], diet_preference: list[str]) -> list[Recipe]:
+def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str]) -> list[Recipe]:
     """Return a filtered list of recipes based on the provided allergy and diet preference data.
     """
     filtered_recipes = []
@@ -430,22 +430,29 @@ def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str], diet_
     return filtered_recipes
 
 
-@check_contracts
-def recommend_recipes(recipe_file: str) -> list[Recipe]:
-    """Run a recipe recommender program based on the given recipe data file and questionnaire answers.
-    """
-    # main/side/dessert -> difficulty (5 10 20 30) -> time (30 80 160 240 240+) -> cal (500-2000)
-
-    decision_tree = build_decision_tree(recipe_file)
-    # answers = form.form_answers
-    # portion = 'main'  # placeholder
-    # allergens = answers['Allergies']
-    # diet = answers['Diet']
-    # recipes = decision_tree.check_equality(
-    #     [portion, answers['Difficulty'], answers['Time'], answers['Calories']])
-    # return filter_recipes(recipes, allergens, diet)
+# @check_contracts
+# def recommend_recipes(recipe_file: str) -> list[Recipe]:
+#     """Run a recipe recommender program based on the given recipe data file and questionnaire answers.
+#     """
+#     # main/side/dessert -> difficulty (5 10 20 30) -> time (30 80 160 240 240+) -> cal (500-2000)
+#
+#     decision_tree = build_decision_tree(recipe_file)
+#     answers = form.form_answers
+#     portion = 'main'  # placeholder
+#     allergens = answers['Allergies']
+#     diet = answers['Diet']
+#     recipes = decision_tree.check_equality(
+#         [portion, answers['Difficulty'], answers['Time'], answers['Calories']])
+#     return filter_recipes(recipes, allergens, diet)
 
 
 if __name__ == '__main__':
     import doctest
-    # doctest.testmod(verbose=True)
+    doctest.testmod(verbose=True)
+
+    import python_ta
+    python_ta.check_all('tree.py', config={
+        'max-line-length': 120,
+        'extra-imports': ['csv', 'ast', 'recipes'],
+        'allowed-io': ['build_decision_tree']
+    })

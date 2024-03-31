@@ -13,27 +13,8 @@ import customtkinter as ctk
 from PIL import Image
 import recipes
 
-ctk.set_appearance_mode("dark")
+ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("dark-blue")
-
-
-class App(ctk.CTk):
-    """An app that recommends recipes to users.
-
-    Instance Attributes:
-        - self.generate_button: a button that displays the recipes in a new window when clicked
-        - self.tab_window: an additional window to display the recipes
-    """
-    def __init__(self, recipe_data: list[recipes.Recipe]) -> None:
-        super().__init__()
-
-        self.title("Recipe Recommendations")
-
-        self.label = ctk.CTkLabel(self, text="Recipe Recommendations", font=("TkDefaultFont", 30))
-        self.label.pack(padx=20, pady=20)
-
-        tab_view = TabView(master=self, recipes=recipe_data)
-        tab_view.pack(side="top", padx=20, pady=20)
 
 
 class TabWindow(ctk.CTkToplevel):
@@ -42,13 +23,15 @@ class TabWindow(ctk.CTkToplevel):
     Instance Attributes:
         - label: The label containing the text in the window
     """
+    label: ctk.CTkLabel
+
     def __init__(self, recipe_data: list[recipes.Recipe], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
         self.label = ctk.CTkLabel(self, text="Recipe Recommendations", font=("TkDefaultFont", 30))
         self.label.pack(padx=20, pady=20)
 
-        tab_view = TabView(master=self, recipes=recipe_data)
+        tab_view = TabView(master=self, recipes_list=recipe_data)
         tab_view.pack(side="top", padx=20, pady=20)
 
 
@@ -56,10 +39,13 @@ class TabView(ctk.CTkTabview):
     """A tabview with 5 tabs, one for each recipe.
 
     Instance Attributes:
-        - label: The label containing the data of the recipe
+        - textbox: The textbox containing the data of the recipe
         - label_img: The label containing the image of the spider chart for the recipe
     """
-    def __init__(self, master, recipes: list[recipes.Recipe], **kwargs) -> None:
+    textbox: ctk.CTkTextbox
+    label_img: ctk.CTkLabel
+
+    def __init__(self, master: ctk.CTkToplevel, recipes_list: list[recipes.Recipe], **kwargs) -> None:
         """Initialize a tabview with 5 tabs using the given recipe data.
 
         Preconditions:
@@ -74,15 +60,15 @@ class TabView(ctk.CTkTabview):
         for i in range(1, 6):
             self.add(f"Recipe {i}")
 
-        num_recipes = len(recipes)
+        num_recipes = len(recipes_list)
 
         # add widgets on tabs
         for i in range(1, num_recipes + 1):
             # load the string representation of the recipe
-            txt = str(recipes[i - 1])
+            txt = str(recipes_list[i - 1])
 
             # load the radar chart
-            recipes[i - 1].create_radar_chart("fig")
+            recipes_list[i - 1].create_radar_chart("fig")
             img = ctk.CTkImage(Image.open("fig.png"), size=(700, 500))
 
             self.textbox = ctk.CTkTextbox(master=self.tab(f"Recipe {i}"), width=400, corner_radius=0,
@@ -97,3 +83,15 @@ class TabView(ctk.CTkTabview):
                                           fg_color="transparent")
             self.textbox.grid(row=0, column=0, sticky="nsew")
             self.textbox.insert("0.0", "Not enough recipes fit the criteria.")
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(verbose=True)
+
+    import python_ta
+    python_ta.check_all('gui.py', config={
+        'max-line-length': 120,
+        'extra-imports': ['customtkinter', 'PIL', 'recipes'],
+        'allowed-io': []
+    })

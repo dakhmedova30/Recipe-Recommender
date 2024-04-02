@@ -9,9 +9,9 @@ Copyright and Usage Information
 This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
 """
 
+from typing import Optional
 import plotly.express as px
 import pandas as pd
-from typing import Optional
 
 
 class Recipe:

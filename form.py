@@ -1,3 +1,14 @@
+"""CSC111 Winter 2024 Project 2
+
+Module Description
+==================
+This module contains the code necessary to run the questionnaire form in the recipe recommender.
+
+Copyright and Usage Information
+===============================
+This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
+"""
+
 import tkinter
 from tkinter import ttk
 from tkinter import *

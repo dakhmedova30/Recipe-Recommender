@@ -296,12 +296,6 @@ class Tree:
             - len(items) == (height of the tree - 2)
             - height of the tree > 2
             - all children of the root have the same length
-
-        >>> tree = build_decision_tree('filtered_merged_small.csv')  # check in console
-        >>> tree.check_equality(['other','5','250','500'])  # returns recipe object
-        ['white bean   green chile pepper soup']
-        >>> tree.check_equality(['dessert','10','30','500'])
-        ['devilicious cookie cake delights', 'sugared raspberries']
         """
         # main/side/dessert -> difficulty (5 10 20 30+) -> time (30 80 160 240 240+) -> cal (500-2000+)
         if self.is_empty() or features == []:

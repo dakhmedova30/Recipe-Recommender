@@ -16,19 +16,9 @@ import tree
 import gui
 
 
-# form_answers = {
-#     "Difficulty": '',
-#     "Time": '',
-#     "Calories": '',
-#     "Allergy": '',
-#     "List Allergies": '',
-#     "Diet": '',
-#     "Cuisine": '',
-#     "Food": '',
-#     'Other': ''
-# }
-
-def clear_form():
+def clear_form() -> None:
+    """Clears all previous answers in the form.
+    """
     difficulty_combo_box.set('')
     time_combo_box.set('')
     calories_spinbox.delete(0, tkinter.END)
@@ -40,7 +30,9 @@ def clear_form():
     other_text.delete("1.0", tkinter.END)
 
 
-def enter_data():
+def enter_data() -> None:
+    """Takes the inputs in the form and displays the five recommended recipes in a new tab.
+    """
     difficulty = difficulty_combo_box.get()
     time = time_combo_box.get()
     calories = int(calories_spinbox.get())
@@ -64,15 +56,6 @@ def enter_data():
     print("Type of Dish", dish)
     print("Other:", other)
     print("---------------------------------")
-    # form_answers['Difficulty'] = difficulty
-    # form_answers['Time'] = time
-    # form_answers['Calories'] = calories
-    # form_answers['Allergy'] = allergy
-    # form_answers['List Allergies'] = list_allergies
-    # form_answers['Diet'] = diet_selection
-    # form_answers['Cuisine'] = cuisine_selection
-    # form_answers['Food'] = food
-    # form_answers['Other'] = other
 
     match difficulty:
         case "Beginner":
@@ -121,13 +104,12 @@ def enter_data():
     recipes = recipes[:5]  # take the first five recipes
     # calculate cal_range
     if len(recipes) > 0:
-        max_calories = max([recipe.calories for recipe in recipes])
-        min_calories = min([recipe.calories for recipe in recipes])
+        max_calories = max([recipe1.calories for recipe1 in recipes])
+        min_calories = min([recipe2.calories for recipe2 in recipes])
         for recipe in recipes:
             recipe.cal_range = (min_calories, max_calories)
 
     gui.TabWindow(recipes)
-    print([portion, n_steps, time_threshold, calorie_level])
 
     clear_form()
 
@@ -160,7 +142,7 @@ time_combo_box.grid(row=1, column=1)
 
 # Calories
 calories_label = tkinter.Label(basic_info_frame, text="*Calories")
-calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000) 
+calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000)
 calories_label.grid(row=0, column=2)
 calories_spinbox.grid(row=1, column=2)
 

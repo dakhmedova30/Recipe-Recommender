@@ -311,8 +311,8 @@ class Tree:
                 elif item == subtree._root:
                     leaves.extend(subtree.check_equality(features[1:]))
 
-                elif (has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]) and
-                      not subtree._subtrees[0]._subtrees):
+                elif (has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1])
+                      and not subtree._subtrees[0]._subtrees):
                     subtree.append_leaves(leaves)
                 elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]):
                     leaves.extend(subtree.check_equality(features[1:]))
@@ -415,20 +415,10 @@ def filter_recipes(recipes: list[Recipe], allergens: list[str], diet: list[str],
     """
     filtered_recipes = {}
     final = {}
-    # for recipe in recipes:
-    #     if not any(allergen in ingredient for allergen in allergens for ingredient in recipe.ingredients):
-    #         # if len(food) >= 1 and any(f in recipe.name for f in food):
-    #         #     filtered_recipes[recipe] = 0
-    #         # else:
-    #         filtered_recipes[recipe] = 0
-    #
-    # for recipe in filtered_recipes:
-    #     if diet in recipe.tags:
-    #         final[recipe] = 0
+
     for recipe in recipes:
-        if allergens != [''] and any([allergen in ingredient for allergen in allergens
-                                            for ingredient in recipe.ingredients]):
-            # recipes.remove(recipe)
+        if allergens != [''] and any([allergen in ingredient for allergen in allergens for ingredient in
+                                      recipe.ingredients]):
             pass
         elif len(food) >= 1 and any(f in recipe.name for f in food):
             filtered_recipes[recipe] = 0

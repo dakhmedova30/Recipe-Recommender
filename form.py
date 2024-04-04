@@ -19,31 +19,31 @@ import gui
 def clear_form() -> None:
     """Clears all previous answers in the form.
     """
-    difficulty_combo_box.set('')
-    time_combo_box.set('')
-    calories_spinbox.delete(0, tkinter.END)
-    allergy_status_var.set('No')
-    allergies_text.delete("1.0", tkinter.END)
-    diet_listbox.selection_clear(0, tkinter.END)
-    cuisine_listbox.selection_clear(0, tkinter.END)
-    food_text.delete("1.0", tkinter.END)
-    other_text.delete("1.0", tkinter.END)
+    DIFFICULTY_COMBO_BOX.set('')
+    TIME_COMBO_BOX.set('')
+    CALORIES_SPINBOX.delete(0, tkinter.END)
+    ALLERGY_STATUS_VAR.set('No')
+    ALLERGIES_TEXT.delete("1.0", tkinter.END)
+    DIET_LISTBOX.selection_clear(0, tkinter.END)
+    CUISINE_LISTBOX.selection_clear(0, tkinter.END)
+    FOOD_TEXT.delete("1.0", tkinter.END)
+    OTHER_TEXT.delete("1.0", tkinter.END)
 
 
 def enter_data() -> None:
     """Takes the inputs in the form and displays the five recommended recipes in a new tab.
     """
-    difficulty = difficulty_combo_box.get()
-    time = time_combo_box.get()
-    calories = int(calories_spinbox.get())
-    allergy = allergy_status_var.get()
-    list_allergies = allergies_text.get("1.0", tkinter.END).strip().split(',')
+    difficulty = DIFFICULTY_COMBO_BOX.get()
+    time = TIME_COMBO_BOX.get()
+    calories = int(CALORIES_SPINBOX.get())
+    allergy = ALLERGY_STATUS_VAR.get()
+    list_allergies = ALLERGIES_TEXT.get("1.0", tkinter.END).strip().split(',')
 
-    diet_selection = [diet_listbox.get(idx) for idx in diet_listbox.curselection()]
-    cuisine_selection = [cuisine_listbox.get(idx) for idx in cuisine_listbox.curselection()]
-    food = food_text.get("1.0", tkinter.END).strip().split(',')
-    dish = [dish_listbox.get(idx) for idx in dish_listbox.curselection()][0]
-    other = other_text.get("1.0", tkinter.END).strip().split(',')
+    diet_selection = [DIET_LISTBOX.get(idx) for idx in DIET_LISTBOX.curselection()]
+    cuisine_selection = [CUISINE_LISTBOX.get(idx) for idx in CUISINE_LISTBOX.curselection()]
+    food = FOOD_TEXT.get("1.0", tkinter.END).strip().split(',')
+    dish = [DISH_LISTBOX.get(idx) for idx in DISH_LISTBOX.curselection()][0]
+    other = OTHER_TEXT.get("1.0", tkinter.END).strip().split(',')
 
     print("Difficulty:", difficulty)
     print("Time:", time)
@@ -114,141 +114,141 @@ def enter_data() -> None:
     clear_form()
 
 
-window = tkinter.Tk()
-window.title("Questionnaire")
+WINDOW = tkinter.Tk()
+WINDOW.title("Questionnaire")
 
-frame = tkinter.Frame(window)
-frame.pack()
+FRAME = tkinter.Frame(WINDOW)
+FRAME.pack()
 
 # Saving Basic Info
-basic_info_frame = tkinter.LabelFrame(frame, text="Basic Information")
-basic_info_frame.grid(row=0, column=0, sticky="news", padx=20, pady=10)
+BASIC_INFO_FRAME = tkinter.LabelFrame(FRAME, text="Basic Information")
+BASIC_INFO_FRAME.grid(row=0, column=0, sticky="news", padx=20, pady=10)
 
 # Difficulty
-difficulty_label = tkinter.Label(basic_info_frame, text="*Difficulty")
-difficulty_combo_box = ttk.Combobox(basic_info_frame,
+DIFFICULTY_LABEL = tkinter.Label(BASIC_INFO_FRAME, text="*Difficulty")
+DIFFICULTY_COMBO_BOX = ttk.Combobox(BASIC_INFO_FRAME,
                                     values=["Beginner", "Novice", "Intermediate", "Advanced", "Expert"],
                                     state="readonly")
-difficulty_label.grid(row=0, column=0)
-difficulty_combo_box.grid(row=1, column=0)
+DIFFICULTY_LABEL.grid(row=0, column=0)
+DIFFICULTY_COMBO_BOX.grid(row=1, column=0)
 
 # Time Taken
-time_label = tkinter.Label(basic_info_frame, text="*Max Time Taken")
-time_combo_box = ttk.Combobox(basic_info_frame,
+TIME_LABEL = tkinter.Label(BASIC_INFO_FRAME, text="*Max Time Taken")
+TIME_COMBO_BOX = ttk.Combobox(BASIC_INFO_FRAME,
                               values=["0-29 Minutes", "30-79 Minutes", "80-159 Minutes", "160-239 Minutes",
                                       "240+ Minutes"], state="readonly")
-time_label.grid(row=0, column=1)
-time_combo_box.grid(row=1, column=1)
+TIME_LABEL.grid(row=0, column=1)
+TIME_COMBO_BOX.grid(row=1, column=1)
 
 # Calories
-calories_label = tkinter.Label(basic_info_frame, text="*Calories")
-calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000)
-calories_label.grid(row=0, column=2)
-calories_spinbox.grid(row=1, column=2)
+CALORIES_LABEL = tkinter.Label(BASIC_INFO_FRAME, text="*Calories")
+CALORIES_SPINBOX = tkinter.Spinbox(BASIC_INFO_FRAME, from_=0, to=5000)
+CALORIES_LABEL.grid(row=0, column=2)
+CALORIES_SPINBOX.grid(row=1, column=2)
 
 # Allergy
-allergy_label = tkinter.Label(basic_info_frame, text="Have Allergies?")
-allergy_status_var = tkinter.StringVar(value="No")
-allergy_check = tkinter.Checkbutton(basic_info_frame, text="Yes", variable=allergy_status_var, onvalue="Yes",
+ALLERGY_LABEL = tkinter.Label(BASIC_INFO_FRAME, text="Have Allergies?")
+ALLERGY_STATUS_VAR = tkinter.StringVar(value="No")
+ALLERGY_CHECK = tkinter.Checkbutton(BASIC_INFO_FRAME, text="Yes", variable=ALLERGY_STATUS_VAR, onvalue="Yes",
                                     offvalue="No")
-allergy_label.grid(row=2, column=0)
-allergy_check.grid(row=3, column=0)
+ALLERGY_LABEL.grid(row=2, column=0)
+ALLERGY_CHECK.grid(row=3, column=0)
 
 # List Allergies
-allergies_label = tkinter.Label(basic_info_frame, text="List Allergies (separate by commas)")
-allergies_text = tkinter.Text(basic_info_frame, width=5, height=2)
-allergies_label.grid(row=2, column=1)
-allergies_text.grid(row=3, column=1, sticky="ew", padx=5)
+ALLERGIES_LABEL = tkinter.Label(BASIC_INFO_FRAME, text="List Allergies (separate by commas)")
+ALLERGIES_TEXT = tkinter.Text(BASIC_INFO_FRAME, width=5, height=2)
+ALLERGIES_LABEL.grid(row=2, column=1)
+ALLERGIES_TEXT.grid(row=3, column=1, sticky="ew", padx=5)
 
-for widget in basic_info_frame.winfo_children():
-    widget.grid_configure(padx=10, pady=10)
+for WIDGET in BASIC_INFO_FRAME.winfo_children():
+    WIDGET.grid_configure(padx=10, pady=10)
 
 # Saving Preferences
-preferences_frame = tkinter.LabelFrame(frame, text="Preferences")
-preferences_frame.grid(row=1, column=0, sticky="news", padx=20, pady=10)
+PREFERENCES_FRAME = tkinter.LabelFrame(FRAME, text="Preferences")
+PREFERENCES_FRAME.grid(row=1, column=0, sticky="news", padx=20, pady=10)
 
 # Diet
-diet_label = tkinter.Label(preferences_frame, text="Diet (Optional)")
-diet_label.grid(row=0, column=0)
-diet_frame = tkinter.Frame(preferences_frame)
-diet_frame.grid(row=1, column=0)
+DIET_LABEL = tkinter.Label(PREFERENCES_FRAME, text="Diet (Optional)")
+DIET_LABEL.grid(row=0, column=0)
+DIET_FRAME = tkinter.Frame(PREFERENCES_FRAME)
+DIET_FRAME.grid(row=1, column=0)
 
-diet_scrollbar = tkinter.Scrollbar(diet_frame, orient=tkinter.VERTICAL)
-diet_listbox = tkinter.Listbox(diet_frame, selectmode="multiple", yscrollcommand=diet_scrollbar.set, exportselection=0)
-diet_list = ["Vegetarian", "Vegan", "Pescetarian", "Dairy-Free", "Gluten-Free", "Lactose-Free", "Low-Cholesterol",
+DIET_SCROLLBAR = tkinter.Scrollbar(DIET_FRAME, orient=tkinter.VERTICAL)
+DIET_LISTBOX = tkinter.Listbox(DIET_FRAME, selectmode="multiple", yscrollcommand=DIET_SCROLLBAR.set, exportselection=0)
+DIET_LIST = ["Vegetarian", "Vegan", "Pescetarian", "Dairy-Free", "Gluten-Free", "Lactose-Free", "Low-Cholesterol",
              "Halal", "Kosher", "Keto", "Paleo"]
-for diet_item in diet_list:
-    diet_listbox.insert(tkinter.END, diet_item)
+for DIET_ITEM in DIET_LIST:
+    DIET_LISTBOX.insert(tkinter.END, DIET_ITEM)
 
-diet_listbox.grid(row=0, column=0, sticky="nsew")
-diet_scrollbar.config(command=diet_listbox.yview)
-diet_scrollbar.grid(row=0, column=1, sticky="ns")
+DIET_LISTBOX.grid(row=0, column=0, sticky="nsew")
+DIET_SCROLLBAR.config(command=DIET_LISTBOX.yview)
+DIET_SCROLLBAR.grid(row=0, column=1, sticky="ns")
 
-preferences_frame.columnconfigure(0, weight=1)
-preferences_frame.rowconfigure(1, weight=1)
+PREFERENCES_FRAME.columnconfigure(0, weight=1)
+PREFERENCES_FRAME.rowconfigure(1, weight=1)
 
 # Cuisine
-cuisine_label = tkinter.Label(preferences_frame, text="Cuisine (Optional)")
-cuisine_label.grid(row=0, column=1)
-cuisine_frame = tkinter.Frame(preferences_frame)
-cuisine_frame.grid(row=1, column=1)
+CUISINE_LABEL = tkinter.Label(PREFERENCES_FRAME, text="Cuisine (Optional)")
+CUISINE_LABEL.grid(row=0, column=1)
+CUISINE_FRAME = tkinter.Frame(PREFERENCES_FRAME)
+CUISINE_FRAME.grid(row=1, column=1)
 
-cuisine_scrollbar = tkinter.Scrollbar(cuisine_frame, orient=tkinter.VERTICAL)
-cuisine_listbox = tkinter.Listbox(cuisine_frame, selectmode="multiple", yscrollcommand=cuisine_scrollbar.set,
+CUISINE_SCROLLBAR = tkinter.Scrollbar(CUISINE_FRAME, orient=tkinter.VERTICAL)
+CUISINE_LISTBOX = tkinter.Listbox(CUISINE_FRAME, selectmode="multiple", yscrollcommand=CUISINE_SCROLLBAR.set,
                                   exportselection=0)
-cuisine_list = ["African", "American", "Chinese", "French", "Greek", "Indian", "Italian", "Japanese", "Korean",
+CUISINE_LIST = ["African", "American", "Chinese", "French", "Greek", "Indian", "Italian", "Japanese", "Korean",
                 "Mexican", "Middle-Eastern", "Spanish", "Thai", "Vietnamese"]
-for cuisine_item in cuisine_list:
-    cuisine_listbox.insert(tkinter.END, cuisine_item)
+for CUISINE_ITEM in CUISINE_LIST:
+    CUISINE_LISTBOX.insert(tkinter.END, CUISINE_ITEM)
 
-cuisine_listbox.grid(row=0, column=0, sticky="nsew")
-cuisine_scrollbar.config(command=cuisine_listbox.yview)
-cuisine_scrollbar.grid(row=0, column=1, sticky="ns")
+CUISINE_LISTBOX.grid(row=0, column=0, sticky="nsew")
+CUISINE_SCROLLBAR.config(command=CUISINE_LISTBOX.yview)
+CUISINE_SCROLLBAR.grid(row=0, column=1, sticky="ns")
 
-preferences_frame.columnconfigure(1, weight=1)
-preferences_frame.rowconfigure(1, weight=1)
+PREFERENCES_FRAME.columnconfigure(1, weight=1)
+PREFERENCES_FRAME.rowconfigure(1, weight=1)
 
 # Food
-food_label = tkinter.Label(preferences_frame, text="Food (separate by commas)")
-food_text = tkinter.Text(preferences_frame, width=5, height=10)
-food_label.grid(row=0, column=2)
-food_text.grid(row=1, column=2, sticky="ew", padx=5)
+FOOD_LABEL = tkinter.Label(PREFERENCES_FRAME, text="Food (separate by commas)")
+FOOD_TEXT = tkinter.Text(PREFERENCES_FRAME, width=5, height=10)
+FOOD_LABEL.grid(row=0, column=2)
+FOOD_TEXT.grid(row=1, column=2, sticky="ew", padx=5)
 
 # Type of Dish
-dish_label = tkinter.Label(preferences_frame, text="*Type of Dish")
-dish_label.grid(row=2, column=0)
-dish_frame = tkinter.Frame(preferences_frame)
-dish_frame.grid(row=3, column=0)
+DISH_LABEL = tkinter.Label(PREFERENCES_FRAME, text="*Type of Dish")
+DISH_LABEL.grid(row=2, column=0)
+DISH_FRAME = tkinter.Frame(PREFERENCES_FRAME)
+DISH_FRAME.grid(row=3, column=0)
 
-# dish_scrollbar = tkinter.Scrollbar(dish_frame, orient=tkinter.VERTICAL)
-dish_listbox = tkinter.Listbox(dish_frame, selectmode="single", exportselection=0, width=23, height=4)
-dish_list = ["Main Dish", "Side Dish", "Dessert", "Other"]
-for dish_item in dish_list:
-    dish_listbox.insert(tkinter.END, dish_item)
+# dish_scrollbar = tkinter.Scrollbar(DISH_FRAME, orient=tkinter.VERTICAL)
+DISH_LISTBOX = tkinter.Listbox(DISH_FRAME, selectmode="single", exportselection=0, width=23, height=4)
+DISH_LIST = ["Main Dish", "Side Dish", "Dessert", "Other"]
+for DISH_ITEM in DISH_LIST:
+    DISH_LISTBOX.insert(tkinter.END, DISH_ITEM)
 
-dish_listbox.grid(row=0, column=0, sticky="nsew")
-# dish_scrollbar.config(command=dish_listbox.yview)
+DISH_LISTBOX.grid(row=0, column=0, sticky="nsew")
+# dish_scrollbar.config(command=DISH_LISTBOX.yview)
 # dish_scrollbar.grid(row=0, column=1, sticky="ns")
 
-# preferences_frame.columnconfigure(2, weight=1)
-# preferences_frame.rowconfigure(3, weight=1)
+# PREFERENCES_FRAME.columnconfigure(2, weight=1)
+# PREFERENCES_FRAME.rowconfigure(3, weight=1)
 
 # Other
-other_label = tkinter.Label(preferences_frame, text="Other (separate by commas)")
-other_text = tkinter.Text(preferences_frame, width=5, height=3)
-other_label.grid(row=2, column=1)
-other_text.grid(row=3, column=1, sticky="ew", padx=5)
+OTHER_LABEL = tkinter.Label(PREFERENCES_FRAME, text="Other (separate by commas)")
+OTHER_TEXT = tkinter.Text(PREFERENCES_FRAME, width=5, height=3)
+OTHER_LABEL.grid(row=2, column=1)
+OTHER_TEXT.grid(row=3, column=1, sticky="ew", padx=5)
 
-for widget in preferences_frame.winfo_children():
-    widget.grid_configure(padx=10, pady=10)
+for WIDGET in PREFERENCES_FRAME.winfo_children():
+    WIDGET.grid_configure(padx=10, pady=10)
 
 # Submit Button
-button = tkinter.Button(frame, text="Submit", command=enter_data)
-button.grid(row=2, column=0, sticky="news", padx=20, pady=10)
+BUTTON = tkinter.Button(FRAME, text="Submit", command=enter_data)
+BUTTON.grid(row=2, column=0, sticky="news", padx=20, pady=10)
 
 # Clear Button
-clear_button = tkinter.Button(frame, text="Clear", command=clear_form)
-clear_button.grid(row=3, column=0, sticky="news", padx=20, pady=10)
+CLEAR_BUTTON = tkinter.Button(FRAME, text="Clear", command=clear_form)
+CLEAR_BUTTON.grid(row=3, column=0, sticky="news", padx=20, pady=10)
 
 if __name__ == '__main__':
     import doctest

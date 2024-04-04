@@ -311,8 +311,8 @@ class Tree:
                 elif item == subtree._root:
                     leaves.extend(subtree.check_equality(features[1:]))
 
-                elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]) and not subtree._subtrees[
-                    0]._subtrees:
+                elif (has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]) and
+                      not subtree._subtrees[0]._subtrees):
                     subtree.append_leaves(leaves)
                 elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]):
                     leaves.extend(subtree.check_equality(features[1:]))
@@ -329,11 +329,6 @@ class Tree:
         """
         for sub in self._subtrees:
             lst.append(sub._root)
-
-
-################################################################################
-# Part 2.2 Decision trees
-################################################################################
 
 
 # @check_contracts

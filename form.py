@@ -49,7 +49,7 @@ def enter_data():
 
     diet_selection = [diet_listbox.get(idx) for idx in diet_listbox.curselection()]
     cuisine_selection = [cuisine_listbox.get(idx) for idx in cuisine_listbox.curselection()]
-    food = food_text.get("1.0", tkinter.END).strip()
+    food = food_text.get("1.0", tkinter.END).strip().split(',')
     dish = [dish_listbox.get(idx) for idx in dish_listbox.curselection()][0]
     other = other_text.get("1.0", tkinter.END).strip().split(',')
 
@@ -113,9 +113,10 @@ def enter_data():
     portion = dish.lower()
     allergens = list_allergies
     diet = diet_selection
+    cuisine = cuisine_selection
     recipes = decision_tree.check_equality(
         [portion, n_steps, time_threshold, calorie_level])
-    recipes = tree.filter_recipes(recipes, allergens)  # TODO
+    recipes = tree.filter_recipes(recipes, allergens, diet, food, cuisine, other)
 
     recipes = recipes[:5]  # take the first five recipes
     # calculate cal_range
@@ -144,7 +145,8 @@ basic_info_frame.grid(row=0, column=0, sticky="news", padx=20, pady=10)
 # Difficulty
 difficulty_label = tkinter.Label(basic_info_frame, text="*Difficulty")
 difficulty_combo_box = ttk.Combobox(basic_info_frame,
-                                    values=["Beginner", "Novice", "Intermediate", "Advanced", "Expert"])
+                                    values=["Beginner", "Novice", "Intermediate", "Advanced", "Expert"],
+                                    state="readonly")
 difficulty_label.grid(row=0, column=0)
 difficulty_combo_box.grid(row=1, column=0)
 
@@ -152,13 +154,13 @@ difficulty_combo_box.grid(row=1, column=0)
 time_label = tkinter.Label(basic_info_frame, text="*Max Time Taken")
 time_combo_box = ttk.Combobox(basic_info_frame,
                               values=["0-29 Minutes", "30-79 Minutes", "80-159 Minutes", "160-239 Minutes",
-                                      "240+ Minutes"])
+                                      "240+ Minutes"], state="readonly")
 time_label.grid(row=0, column=1)
 time_combo_box.grid(row=1, column=1)
 
 # Calories
 calories_label = tkinter.Label(basic_info_frame, text="*Calories")
-calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000)  # TODO: Whats the max?
+calories_spinbox = tkinter.Spinbox(basic_info_frame, from_=0, to=5000) 
 calories_label.grid(row=0, column=2)
 calories_spinbox.grid(row=1, column=2)
 

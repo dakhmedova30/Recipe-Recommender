@@ -11,4 +11,4 @@ This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedo
 import form
 
 if __name__ == '__main__':
-    form.window.mainloop()
+    form.WINDOW.mainloop()

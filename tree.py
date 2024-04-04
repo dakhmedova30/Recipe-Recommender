@@ -312,7 +312,7 @@ class Tree:
                     leaves.extend(subtree.check_equality(features[1:]))
 
                 elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]) and not subtree._subtrees[
-                        0]._subtrees:
+                    0]._subtrees:
                     subtree.append_leaves(leaves)
                 elif has_plus and int(item) >= int(subtree._root[:len(subtree._root) - 1]):
                     leaves.extend(subtree.check_equality(features[1:]))
@@ -357,7 +357,8 @@ def build_decision_tree(file: str) -> Tree:
             ingredients = ast.literal_eval(row[14])
             steps = ast.literal_eval(row[12])
             calories = float(ast.literal_eval(row[10])[0])
-            recipe = Recipe(name, cooking_time, average_rating, ingredients, steps, calories)
+            tags = ast.literal_eval(row[9])
+            recipe = Recipe(name, cooking_time, average_rating, ingredients, steps, calories, tags)
             new_branch = []
 
             # food preference
@@ -413,37 +414,40 @@ def build_decision_tree(file: str) -> Tree:
     return tree
 
 
-def filter_recipes(recipes: list[Recipe], allergic_ingredients: list[str]) -> list[Recipe]:
+def filter_recipes(recipes: list[Recipe], allergens: list[str], diet: list[str], food: list[str], cuisine: list[str],
+                   other: list[str]) -> list[Recipe]:
     """Return a filtered list of recipes based on the provided allergy and diet preference data.
     """
-    filtered_recipes = []
+    filtered_recipes = {}
+    final = {}
+
     for recipe in recipes:
-        if all(allergen not in recipe.ingredients for allergen in allergic_ingredients):  # TODO: filter diet preference
-            filtered_recipes.append(recipe)
-    return filtered_recipes
+        if not any(allergen in ingredient for allergen in allergens for ingredient in recipe.ingredients) and \
+                any(f in recipe.name for f in food):
+            filtered_recipes[recipe] = 0
 
+    for recipe in filtered_recipes:
+        if diet not in recipe.tags:
+            final[recipe] = 0
 
-# @check_contracts
-# def recommend_recipes(recipe_file: str) -> list[Recipe]:
-#     """Run a recipe recommender program based on the given recipe data file and questionnaire answers.
-#     """
-#     # main/side/dessert -> difficulty (5 10 20 30) -> time (30 80 160 240 240+) -> cal (500-2000)
-#
-#     decision_tree = build_decision_tree(recipe_file)
-#     answers = form.form_answers
-#     portion = 'main'  # placeholder
-#     allergens = answers['Allergies']
-#     diet = answers['Diet']
-#     recipes = decision_tree.check_equality(
-#         [portion, answers['Difficulty'], answers['Time'], answers['Calories']])
-#     return filter_recipes(recipes, allergens, diet)
+    for recipe in final:
+        includes_tags = [o for o in other if o in recipe.tags]
+        has_cuisine = any(c in recipe.tags for c in cuisine)
+        final[recipe] += len(includes_tags)
+        if has_cuisine:
+            final[recipe] += 1
+
+    sorted_final = sorted(final.items(), key=lambda x: x[1], reverse=True)
+    return [r[0] for r in sorted_final]
 
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod(verbose=True)
 
     import python_ta
+
     python_ta.check_all('tree.py', config={
         'max-line-length': 120,
         'extra-imports': ['csv', 'ast', 'recipes'],

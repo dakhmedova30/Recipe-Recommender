@@ -23,16 +23,18 @@ class Recipe:
     ingredients: list[str]
     steps: list[str]
     calories: float
+    tags: list[str]
     cal_range: tuple[int, int]
 
     def __init__(self, name: str, cooking_time: int, rating: int, ingredients: list[str], steps: list[str],
-                 calories: float, cal_range: Optional[tuple[int, int]] = (0, 0)) -> None:
+                 calories: float, tags: list[str], cal_range: Optional[tuple[int, int]] = (0, 0)) -> None:
         self.name = name
         self.cooking_time = cooking_time
         self.rating = rating
         self.ingredients = ingredients
         self.steps = steps
         self.calories = calories
+        self.tags = tags
         self.cal_range = cal_range  # (min, max) calories out of the 5 recommended
 
     def __str__(self) -> str:
@@ -64,7 +66,7 @@ class Recipe:
         >>> ingredients1 = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 'garlic cloves',\
          'flour', 'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', \
          'ground cumin', 'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
-        >>> r1 = Recipe("lamb stew", 150, 4, ingredients1, steps1, 605.5, (490, 730)) # steps 14, ingredients 16
+        >>> r1 = Recipe("lamb stew", 150, 4, ingredients1, steps1, 605.5, [], (490, 730)) # steps 14, ingredients 16
         >>> r1.scale("cooking time")
         3
         >>> r1.scale("ingredients")

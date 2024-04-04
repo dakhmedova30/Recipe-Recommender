@@ -426,10 +426,11 @@ def filter_recipes(recipes: list[Recipe], allergens: list[str], diet: list[str],
     #     if diet in recipe.tags:
     #         final[recipe] = 0
     for recipe in recipes:
-        if any([allergen in ingredient for allergen in allergens for ingredient in recipe.ingredients]):
-            recipes.remove(recipe)
-
-        if len(food) >= 1 and any(f in recipe.name for f in food):
+        if allergens != [''] and any([allergen in ingredient for allergen in allergens
+                                            for ingredient in recipe.ingredients]):
+            # recipes.remove(recipe)
+            pass
+        elif len(food) >= 1 and any(f in recipe.name for f in food):
             filtered_recipes[recipe] = 0
         else:
             filtered_recipes[recipe] = 0

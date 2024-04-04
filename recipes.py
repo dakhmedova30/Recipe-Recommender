@@ -8,10 +8,9 @@ Copyright and Usage Information
 ===============================
 This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
 """
-
+from typing import Optional
 import plotly.express as px
 import pandas as pd
-from typing import Optional
 
 
 class Recipe:
@@ -27,7 +26,7 @@ class Recipe:
     cal_range: tuple[int, int]
 
     def __init__(self, name: str, cooking_time: int, rating: int, ingredients: list[str], steps: list[str],
-                 calories: float, cal_range: Optional[tuple[int, int]] = (0, 0)):
+                 calories: float, cal_range: Optional[tuple[int, int]] = (0, 0)) -> None:
         self.name = name
         self.cooking_time = cooking_time
         self.rating = rating
@@ -58,18 +57,22 @@ class Recipe:
     def scale(self, category: str) -> int:
         """
         Assigns a value of 1-5 according to the value of the characteristics (for radar chart).
-        >>> steps1 = ['heat oven to 250', 'toss lamb with salt and pepper', 'heat 2 tbls oil in dutch oven over medium high heat',\
-        'brown lamb on all sides in two batches', 'set aside on plate', 'add onions to dutch oven and saute until softened', 'add garlic and cook an additional 30s', 'stir in flour and cook until lightly colored', 'add stock and deglaze pan', 'add tomatoes and spices and bring to simmer before adding lamb and returing to simmer', 'cover and place in oven until meat is almost tender', 'add chickpeas and return to oven until meat is tender and chicpeas are heated through', 'can be cooled , covered and refrigerated up tp 3 days before reheating on stovetop', 'stir in parsley , discard bay leaves and adjust seasoning just before serving']
-        >>> ingredients1 = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 'garlic cloves', 'flour', 'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', 'ground cumin', 'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
+        >>> steps1 = ['heat oven to 250', 'toss lamb with salt and pepper', 'heat 2 tbls oil in dutch oven',\
+         'brown lamb on all sides in two batches', 'set aside on plate',\
+        'add onions to dutch oven and saute until softened', 'add garlic and cook an additional 30s',\
+         'stir in flour and cook until lightly colored', 'add stock and deglaze pan']
+        >>> ingredients1 = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 'garlic cloves',\
+         'flour', 'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', \
+         'ground cumin', 'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
         >>> r1 = Recipe("lamb stew", 150, 4, ingredients1, steps1, 605.5, (490, 730)) # steps 14, ingredients 16
         >>> r1.scale("cooking time")
         3
         >>> r1.scale("ingredients")
         4
         >>> r1.scale("steps")
-        3
+        2
         >>> r1.scale("calories")
-        4
+        2
         """
         match category:
             case "cooking time":
@@ -109,13 +112,13 @@ class Recipe:
                 if self.cal_range[1] == self.calories:
                     return 5
                 else:
-                    interval = (self.cal_range[1] - self.cal_range[0]) / 5
-                    r = [self.cal_range[0] + n*interval for n in range(0, 5)]
+                    interval = (self.cal_range[1] - self.cal_range[0]) / 4
+                    r = [self.cal_range[0] + n * interval for n in range(0, 5)]
                     for index in range(1, 5):
                         if self.calories < r[index]:
-                            return index + 1
+                            return index
 
-    def create_radar_chart(self, image_name: str):
+    def create_radar_chart(self, image_name: str) -> None:
         """
         Generates an image of a radar chart for the recipe
         """
@@ -127,10 +130,14 @@ class Recipe:
         # fig = px.line_polar(df, r='Score', theta='Attributes', color='Recipes', line_close=True)
         # fig.update_traces(fill='toself')
         # fig.show()
-        df = pd.DataFrame(dict(
-            r=[self.rating, self.scale("cooking time"), self.scale("steps"),
-               self.scale("ingredients"), self.scale("calories")],
-            theta=['Rating', 'Cooking Time', 'Complexity', 'No. of Ingredients', 'Calories']))
+        # df = pd.DataFrame(dict(
+        #     r=[self.rating, self.scale("cooking time"), self.scale("steps"),
+        #        self.scale("ingredients"), self.scale("calories")],
+        #     theta=['Rating', 'Cooking Time', 'Complexity', 'No. of Ingredients', 'Calories']))
+        df = pd.DataFrame({"r": [self.rating, self.scale('cooking time'), self.scale('steps'),
+                                 self.scale('ingredients'), self.scale('calories')],
+                           "theta": ['Rating', 'Cooking Time', 'Complexity', 'No. of Ingredients', 'Calories']})
+
         fig = px.line_polar(df, r='r', theta='theta', line_close=True, range_r=[0, 5])
         fig.update_traces(fill='toself')
         # fig.show()
@@ -139,26 +146,13 @@ class Recipe:
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod(verbose=True)
 
     import python_ta
+
     python_ta.check_all('recipes.py', config={
         'max-line-length': 120,
         'extra-imports': ['plotly.express', 'pandas'],
         'allowed-io': []
     })
-
-    s = ['heat oven to 250', 'toss lamb with salt and pepper', 'heat 2 tbls oil in dutch oven over medium high heat',
-             'brown lamb on all sides in two batches', 'set aside on plate',
-             'add onions to dutch oven and saute until softened', 'add garlic and cook an additional 30s',
-             'stir in flour and cook until lightly colored', 'add stock and deglaze pan',
-             'add tomatoes and spices and bring to simmer before adding lamb and returing to simmer',
-             'cover and place in oven until meat is almost tender',
-             'add chickpeas and return to oven until meat is tender and chicpeas are heated through',
-             'can be cooled , covered and refrigerated up tp 3 days before reheating on stovetop',
-             'stir in parsley , discard bay leaves and adjust seasoning just before serving']
-
-    i = ['lamb shoulder', 'salt', 'ground black pepper', 'vegetable oil', 'onions', 'garlic cloves', 'flour',
-                   'low sodium chicken broth', 'tomatoes with juice', 'bay leaves', 'ground coriander', 'ground cumin',
-                   'ground cinnamon', 'ground ginger', 'chickpeas', 'fresh parsley']
-    r1 = Recipe("lamb stew", 150, 4, i, s, 605.5, (490, 730))  # steps 14, ingredients 16

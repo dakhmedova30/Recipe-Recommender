@@ -8,9 +8,6 @@ Copyright and Usage Information
 ===============================
 This file is Copyright (c) 2024 Akanksha Anand Iyengar, Leilia Ho, Diana Akhmedova, Herena Li
 """
-import recipes
-import tree
-import gui
 import form
 
 if __name__ == '__main__':

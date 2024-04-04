@@ -14,7 +14,6 @@ from __future__ import annotations
 import csv
 import ast
 from typing import Any, Optional
-from python_ta.contracts import check_contracts
 from recipes import Recipe
 
 
@@ -245,7 +244,7 @@ class Tree:
               5
         """
 
-        if items == []:
+        if not items:
             return None
         elif self.is_empty():
             self.add_sequence_empty_tree(items)
@@ -274,7 +273,7 @@ class Tree:
           2
             3
         """
-        if items == []:
+        if not items:
             return None
         elif len(items) == 1:
             self._root = items[0]

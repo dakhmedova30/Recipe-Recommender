@@ -16,10 +16,10 @@ A recommender system (using tree data structures) for food recipes that generate
 ## Visual Guide
 
 ### Questionnaire Window
-![alt text](examples/questionnaire.png)
+![alt text](examples/questionnaire)
 
 ### Recommendations Window
-![alt text](examples/recommendations.png)
+![alt text](examples/recommendations)
 
 ## Known Issues
 
